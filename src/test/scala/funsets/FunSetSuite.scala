@@ -77,6 +77,9 @@ class FunSetSuite extends FunSuite {
     val s1 = singletonSet(1)
     val s2 = singletonSet(2)
     val s3 = singletonSet(3)
+    val oneandtwo = union(s1, s2)
+    val twoandthree = union(s2, s3)
+    val onetwothree = union(oneandtwo, twoandthree)
   }
 
   /**
@@ -112,8 +115,6 @@ class FunSetSuite extends FunSuite {
 
   test("intersect {1,2} with {2,3}") {
     new TestSets {
-      val oneandtwo = union(s1, s2)
-      val twoandthree = union(s2, s3)
       val justtwo = intersect(oneandtwo, twoandthree)
       assert(contains(justtwo, 2), "Intersect {1,2} with {2,3} contains 2")
       assert(!contains(justtwo, 1), "Intersect {1,2} with {2,3} does not contain 1")
@@ -123,8 +124,6 @@ class FunSetSuite extends FunSuite {
 
   test("diff {1,2} with {2,3}") {
     new TestSets {
-      val oneandtwo = union(s1, s2)
-      val twoandthree = union(s2, s3)
       val justone = diff(oneandtwo, twoandthree)
       assert(contains(justone, 1), "Diff {1,2} with {2,3} contains 1")
       assert(!contains(justone, 2), "Diff {1,2} with {2,3} does not contains 2")
@@ -134,13 +133,17 @@ class FunSetSuite extends FunSuite {
 
   test("filter {1,2,3} with {2}") {
     new TestSets {
-      val oneandtwo = union(s1, s2)
-      val twoandthree = union(s2, s3)
-      val onetwothree = union(oneandtwo, twoandthree)
       val filtertwo = filter(onetwothree, (x: Int) => {x == 2})
       assert(contains(filtertwo, 2), "Filter {1,2,3} with {2}")
       assert(!contains(filtertwo, 1), "Filter {1,2,3} does not contain 1")
       assert(!contains(filtertwo, 3), "Filter {1,2,3} does not contain 3")
+    }
+  }
+
+  test("forall {1,2,3}") {
+    new TestSets {
+      assert(forall(onetwothree, (x: Int) => {x < 4}), "forall {1,2,3} less than 4")
+      assert(!forall(onetwothree, (x: Int) => {x < 3}), "forall {1,2,3} not less than 3")
     }
   }
 }
