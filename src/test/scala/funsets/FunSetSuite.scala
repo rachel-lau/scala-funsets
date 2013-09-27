@@ -131,4 +131,16 @@ class FunSetSuite extends FunSuite {
       assert(!contains(justone, 3), "Diff {1,2} with {2,3} does not contains 3")
     }
   }
+
+  test("filter {1,2,3} with {2}") {
+    new TestSets {
+      val oneandtwo = union(s1, s2)
+      val twoandthree = union(s2, s3)
+      val onetwothree = union(oneandtwo, twoandthree)
+      val filtertwo = filter(onetwothree, (x: Int) => {x == 2})
+      assert(contains(filtertwo, 2), "Filter {1,2,3} with {2}")
+      assert(!contains(filtertwo, 1), "Filter {1,2,3} does not contain 1")
+      assert(!contains(filtertwo, 3), "Filter {1,2,3} does not contain 3")
+    }
+  }
 }
